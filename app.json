@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "track-it",
+    "slug": "track-it",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "track-it"
+}
