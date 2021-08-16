@@ -43,7 +43,12 @@ const App = () => {
         <Drawer.Screen
           name="Login"
           component={loadedFonts ? LoginScreen : Loader}
-          options={headerOptions}
+          options={{
+            ...headerOptions(),
+            headerTitleStyle: {
+              fontFamily: 'Cochin',
+            },
+          }}
         />
       </Drawer.Navigator>
     </NavigationContainer>
