@@ -1,21 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
+//libraries
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
-import HomeScreen from './src/screens/HomeScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useFonts, Courgette_400Regular } from '@expo-google-fonts/courgette';
 
-const Stack = createNativeStackNavigator();
+//icons
+import ionicIcons from 'react-native-vector-icons/Ionicons';
+
+//screens
+import DrawerScreen from './src/screens/DrawerScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import QRScreen from './src/screens/QRScreen';
+
+//options
+import { screenOptions, headerOptions } from './src/Utils/Options';
+
+const Drawer = createDrawerNavigator();
 
 const App = () => {
+  let [loadedFonts] = useFonts({
+    Courgette_400Regular,
+  });
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      <Drawer.Navigator
+        drawerContent={props => <DrawerScreen {...props} />}
         initialRouteName="Home"
-        screenOptions={{ headerShown: false }}
+        screenOptions={{
+          ...screenOptions(),
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontFamily: 'Courgette_400Regular',
+            fontSize: 32,
+          },
+        }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
+        <Drawer.Screen
+          name="Home"
+          component={HomeScreen}
+          options={headerOptions}
+        />
+        <Drawer.Screen name="QR" component={QRScreen} options={headerOptions} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };
