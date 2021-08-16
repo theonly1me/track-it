@@ -30,7 +30,7 @@ const DrawerScreen = props => {
             <View style={styles.profileContainer}>
               <Avatar.Image
                 source={{
-                  uri: 'https://source.unsplash.com/featured/?portrait,female,face',
+                  uri: 'https://source.unsplash.com/featured/?portrait,female,face,professional',
                   size: 50,
                 }}
               />

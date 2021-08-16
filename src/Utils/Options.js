@@ -1,10 +1,12 @@
+export const COLOR_PRIMARY = '#55efc4';
+
 export const screenOptions = () => {
   return {
     headerStyle: {
-      backgroundColor: '#55efc4',
+      backgroundColor: COLOR_PRIMARY,
     },
     headerTintColor: '#fff',
-    drawerBackgroundColor: '#55efc4',
+    drawerBackgroundColor: COLOR_PRIMARY,
   };
 };
 

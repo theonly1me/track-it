@@ -1,20 +1,18 @@
 //libraries
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useFonts, Courgette_400Regular } from '@expo-google-fonts/courgette';
-
-//icons
-import ionicIcons from 'react-native-vector-icons/Ionicons';
 
 //screens
 import DrawerScreen from './src/screens/DrawerScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import QRScreen from './src/screens/QRScreen';
+import LoginScreen from './src/screens/LoginScreen';
 
 //options
 import { screenOptions, headerOptions } from './src/Utils/Options';
+import Loader from './src/components/Loader';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,7 +24,7 @@ const App = () => {
     <NavigationContainer>
       <Drawer.Navigator
         drawerContent={props => <DrawerScreen {...props} />}
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{
           ...screenOptions(),
           headerTitleStyle: {
@@ -42,6 +40,11 @@ const App = () => {
           options={headerOptions}
         />
         <Drawer.Screen name="QR" component={QRScreen} options={headerOptions} />
+        <Drawer.Screen
+          name="Login"
+          component={loadedFonts ? LoginScreen : Loader}
+          options={headerOptions}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );

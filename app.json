@@ -5,7 +5,9 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "description": "Track.it IOS/Android app",
+    "githubUrl": "https://github.com/theonly1me/track-it"
   },
   "name": "track-it"
 }
