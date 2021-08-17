@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,31 +9,35 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-
 import { signInScreenStyles as styles } from '../Utils/AppStyles';
 import { COLOR_PRIMARY } from '../Utils/Utils';
 
-import { AuthContext } from '../Utils/Context';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { useTheme } from '@react-navigation/native';
 
-const LoginScreen = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
   const [data, setData] = useState({
     secureTextEntry: true,
+    confirmSecureTextEntry: true,
   });
 
   const { colors } = useTheme();
 
-  const initialValues = { email: '', password: '' };
+  const initialValues = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
 
-  //validation with YUP
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid Email').required('Email is required'),
     password: Yup.string().trim().min(7, 'Invalid Password'),
+    confirmPassword: Yup.string().equals(
+      [Yup.ref('password'), null],
+      "The Passwords don't match"
+    ),
   });
-
-  const { login } = useContext(AuthContext);
 
   const updateSecureTextEntry = () => {
     setData({
@@ -42,14 +46,17 @@ const LoginScreen = ({ navigation }) => {
     });
   };
 
-  const handleLogin = (username, password) => {
-    login(username, password);
+  const updateConfirmSecureTextEntry = () => {
+    setData({
+      ...data,
+      confirmSecureTextEntry: !data.confirmSecureTextEntry,
+    });
   };
 
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema}>
-      {({ values, errors, handleChange, touched, handleBlur }) => {
-        const { email, password } = values;
+      {({ errors, touched, values, handleChange, handleBlur }) => {
+        const { email, password, confirmPassword } = values;
         return (
           <View style={styles.container}>
             <StatusBar
@@ -57,7 +64,7 @@ const LoginScreen = ({ navigation }) => {
               barStyle="light-content"
             />
             <View style={styles.header}>
-              <Text style={styles.text_header}>Welcome!</Text>
+              <Text style={styles.text_header}>Register now!</Text>
             </View>
             <Animatable.View
               animation="fadeInUpBig"
@@ -119,27 +126,54 @@ const LoginScreen = ({ navigation }) => {
                   <Text style={styles.errorMsg}>Invalid Password</Text>
                 </Animatable.View>
               )}
-              <View style={{ marginTop: 50 }}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => handleLogin(email, password)}
-                >
-                  <LinearGradient
-                    colors={['#08d4c4', '#01ab9d']}
-                    style={styles.signIn}
-                  >
-                    <Text style={styles.textSign}>Login</Text>
-                  </LinearGradient>
+              <Text style={[styles.text_footer, { marginTop: 35 }]}>
+                Confirm Password
+              </Text>
+              <View style={styles.action}>
+                <Icon name="key-outline" size={25} color={colors.text} />
+                <TextInput
+                  value={confirmPassword}
+                  placeholder="Confirm password"
+                  placeholderTextColor={colors.text}
+                  secureTextEntry={data.confirmSecureTextEntry}
+                  style={styles.textInput}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onChangeText={handleChange('confirmPassword')}
+                  onChangeText={handleChange('confirmPassword')}
+                  onBlur={handleBlur('confirmPassword')}
+                />
+                <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
+                  {data.confirmSecureTextEntry ? (
+                    <Icon name="eye-off-outline" size={25} color="grey" />
+                  ) : (
+                    <Icon name="eye-outline" size={25} color={COLOR_PRIMARY} />
+                  )}
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => navigation.navigate('SignUpScreen')}
-                >
+              </View>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMsg}>Passwords do not match!</Text>
+                </Animatable.View>
+              )}
+              <View style={{ marginTop: 50 }}>
+                <TouchableOpacity style={styles.button}>
                   <LinearGradient
                     colors={['#08d4c4', '#01ab9d']}
                     style={styles.signIn}
                   >
                     <Text style={styles.textSign}>Sign up</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.goBack()}
+                >
+                  <LinearGradient
+                    colors={['#08d4c4', '#01ab9d']}
+                    style={styles.signIn}
+                  >
+                    <Text style={styles.textSign}>Back to Login</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>
@@ -151,4 +185,4 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-export default LoginScreen;
+export default SignUpScreen;

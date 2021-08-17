@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Linking, View } from 'react-native';
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import {
   Avatar,
   Title,
   Caption,
-  Paragraph,
   Drawer,
   Text,
   TouchableRipple,
@@ -13,15 +12,18 @@ import {
 } from 'react-native-paper';
 import ListItem from '../components/ListItem';
 import styles from '../Utils/AppStyles';
+import { useTheme as usePaperTheme } from 'react-native-paper';
+import { AuthContext } from '../Utils/Context';
 
 const DrawerScreen = props => {
   const {
     navigation: { navigate },
   } = props;
-  const [isDarkMode, setDarkMode] = useState(false);
-  const toggleTheme = () => {
-    setDarkMode(!isDarkMode);
-  };
+
+  const paperTheme = usePaperTheme();
+
+  const { logout, toggleTheme } = useContext(AuthContext);
+
   return (
     <View style={styles.containerView}>
       <DrawerContentScrollView {...props}>
@@ -54,11 +56,11 @@ const DrawerScreen = props => {
             />
           </Drawer.Section>
           <Drawer.Section title="Settings">
-            <TouchableRipple onPress={() => toggleTheme()}>
+            <TouchableRipple onPress={toggleTheme}>
               <View style={styles.preference}>
                 <Text>Dark Mode</Text>
                 <View pointerEvents="none">
-                  <Switch value={isDarkMode} />
+                  <Switch value={paperTheme.dark} />
                 </View>
               </View>
             </TouchableRipple>
@@ -66,7 +68,11 @@ const DrawerScreen = props => {
         </View>
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
-        <ListItem label="Sign Out" name="log-out-outline" onPress={() => {}} />
+        <ListItem
+          label="Logout"
+          name="log-out-outline"
+          onPress={() => logout()}
+        />
         <ListItem
           label="Support"
           name="md-people-outline"
