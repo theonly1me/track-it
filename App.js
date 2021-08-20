@@ -34,7 +34,6 @@ const App = () => {
   let [loadedFonts] = useFonts({
     Courgette_400Regular,
   });
-
   const [isDarkMode, setDarkMode] = useState(false);
 
   const CustomDefaultTheme = {
@@ -96,12 +95,14 @@ const App = () => {
 
   const authContext = useMemo(
     () => ({
-      async login(username, password) {
+      async login(username, loginUser) {
         let userToken = null;
-        if (username === 'lauren.h@gmail.com' && password === 'itsmelo') {
+
+        if (loginUser) {
           try {
             userToken = username.slice(3, 5) + new Date().toISOString();
             await AsyncStorage.setItem('userToken', userToken);
+            await AsyncStorage.setItem('user', JSON.stringify(loginUser));
           } catch (e) {
             console.error(e);
           }
@@ -114,6 +115,7 @@ const App = () => {
       async logout() {
         dispatch({ type: 'LOGOUT' });
         try {
+          await AsyncStorage.removeItem('user');
           await AsyncStorage.removeItem('userToken');
         } catch (e) {
           console.error(e);
@@ -133,7 +135,7 @@ const App = () => {
       try {
         userToken = await AsyncStorage.getItem('userToken');
       } catch (e) {
-        console.errro(e);
+        console.error(e);
       }
       dispatch({
         type: 'SIGNUP',

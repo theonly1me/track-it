@@ -18,10 +18,17 @@ import { COLOR_PRIMARY } from '../Utils/Utils';
 import { AuthContext } from '../Utils/Context';
 import { useTheme } from '@react-navigation/native';
 
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import firebaseConfig from '../firebase/firebaseConfig';
+
 const LoginScreen = ({ navigation }) => {
   const [data, setData] = useState({
     secureTextEntry: true,
   });
+
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
   const { colors } = useTheme();
 
@@ -43,7 +50,34 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleLogin = (username, password) => {
-    login(username, password);
+    db.collection('Users')
+      .where('Email', '==', username)
+      .where('Password', '==', password)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          login(username, doc.data());
+        });
+      });
+  };
+
+  const handlePOSLogin = (username, password) => {
+    db.collection('PointOfSale')
+      .where('posID', '==', username)
+      .where('password', '==', password)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          navigation.navigate('POSScreen', { pos: data, id: doc.id });
+        });
+      });
+  };
+
+  const handleLogisticsLogin = (username, password) => {
+    if (username === 'logi@co.sg' && password === 'pass123') {
+      navigation.navigate('AllReturns');
+    }
   };
 
   return (
@@ -142,6 +176,35 @@ const LoginScreen = ({ navigation }) => {
                     <Text style={styles.textSign}>Sign up</Text>
                   </LinearGradient>
                 </TouchableOpacity>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => handlePOSLogin(email, password)}
+                  >
+                    <LinearGradient
+                      colors={['#fff', '#fff']}
+                      style={styles.signInPOS}
+                    >
+                      <Text style={styles.textSignPOS}>POS</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => handleLogisticsLogin(email, password)}
+                  >
+                    <LinearGradient
+                      colors={['#fff', '#fff']}
+                      style={styles.signInLogistics}
+                    >
+                      <Text style={styles.textSignPOS}>Logistics</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
               </View>
             </Animatable.View>
           </View>

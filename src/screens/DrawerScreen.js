@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Linking, View } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import {
@@ -14,12 +14,14 @@ import ListItem from '../components/ListItem';
 import styles from '../Utils/AppStyles';
 import { useTheme as usePaperTheme } from 'react-native-paper';
 import { AuthContext } from '../Utils/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DrawerScreen = props => {
   const {
     navigation: { navigate },
   } = props;
-
+  const [loggedInUser, setLoggedInUser] = useState();
+  AsyncStorage.getItem('user').then(user => setLoggedInUser(JSON.parse(user)));
   const paperTheme = usePaperTheme();
 
   const { logout, toggleTheme } = useContext(AuthContext);
@@ -32,13 +34,15 @@ const DrawerScreen = props => {
             <View style={styles.profileContainer}>
               <Avatar.Image
                 source={{
-                  uri: 'https://source.unsplash.com/featured/?portrait,female,face,professional',
+                  uri: `${loggedInUser?.profilePic}`,
                   size: 50,
                 }}
               />
               <View style={styles.profileDetails}>
-                <Title style={styles.title}>Lauren H.</Title>
-                <Caption style={styles.caption}>@itsmelo</Caption>
+                <Title style={styles.title}>{loggedInUser?.Name}</Title>
+                <Caption style={styles.caption}>{`@${loggedInUser?.Name.split(
+                  ' '
+                )[0].toLowerCase()}${new Date().getUTCFullYear()}`}</Caption>
               </View>
             </View>
           </View>
