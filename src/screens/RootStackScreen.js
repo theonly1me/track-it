@@ -28,7 +28,7 @@ const RootStackScreen = ({ navigation }) => {
         }}
       />
       <RootStack.Screen
-        name="LogistisScreen"
+        name="LogisticsScreen"
         component={LogisticsScreen}
         options={{
           headerMode: 'screen',

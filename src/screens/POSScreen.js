@@ -57,7 +57,7 @@ const POSScreen = props => {
               Credits: (Number.parseInt(user.Credits) + input * 10).toString(),
               Email: user.Email,
               Name: user.Name,
-              password: user.Password,
+              Password: user.Password,
               UserID: user.UserID,
               profilePic: user.profilePic,
             });
@@ -76,7 +76,7 @@ const POSScreen = props => {
               Address: pos.Address,
               Name: pos.Name,
               TotalReturnableBottles: Number.parseInt(
-                pos.TotalReturnableBottles + input
+                +pos.TotalReturnableBottles + +input
               ).toString(),
               hasScheduledReturns: false,
               password: pos.password,
@@ -148,7 +148,7 @@ const POSScreen = props => {
             autoCorrect={false}
             onChangeText={handleInputChange}
           />
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={[styles.button, { marginTop: 20 }]}>
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}
               style={styles.signIn}
@@ -161,7 +161,7 @@ const POSScreen = props => {
         </View>
       </View>
       {scanned && (
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={[styles.button, { marginTop: 20 }]}>
           <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signIn}>
             <Text style={styles.textSign} onPress={() => setScanned(false)}>
               Scan Next
@@ -171,7 +171,7 @@ const POSScreen = props => {
       )}
 
       {!returns && (
-        <View style={{ marginTop: 50 }}>
+        <View style={{ marginTop: 30 }}>
           <Button
             onPress={() => {
               handleScheduleReturns();

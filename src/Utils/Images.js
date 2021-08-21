@@ -1,17 +1,17 @@
 const images = {
-  emily: {
+  'emily-qrcode': {
     uri: require('../../assets/emily-qrcode.png'),
   },
-  jack: {
+  'jack-qrcode': {
     uri: require('../../assets/jack-qrcode.png'),
   },
-  johndoe: {
+  'johndoe-qrcode': {
     uri: require('../../assets/johndoe-qrcode.png'),
   },
-  ravi: {
+  'ravi-qrcode': {
     uri: require('../../assets/ravi-qrcode.png'),
   },
-  robert: {
+  'robert-qrcode': {
     uri: require('../../assets/robert-qrcode.png'),
   },
 };
